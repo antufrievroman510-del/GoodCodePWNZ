@@ -71,7 +71,6 @@ public:
     bool aim_enable = true;
     int aim_target = 0;
     int aim_key_main = VK_RBUTTON;
-    int aim_key_sub = 0;
     int aim_toggle_key = 0;
 
     // Hardware settings (needed for hardware tab)

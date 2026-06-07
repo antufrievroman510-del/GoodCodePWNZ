@@ -34,7 +34,6 @@
 #include "protect.h"
 #include "xorstr.hpp"
 #include "VMProtectSDK.h"
-#include "head_smoother.h"
 
 #define BUILDING_BYTE_TRACK_EIGEN
 #include "BYTETracker.h"
