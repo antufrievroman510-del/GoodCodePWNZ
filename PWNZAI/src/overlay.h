@@ -143,10 +143,6 @@ public:
     int macro_input_val = 50;
     std::vector<MacroStep> macro_sequence;
     int selected_script = 0;
-    char ai_prompt_input[256] = "";
-    bool is_generating_script = false;
-    float script_gen_progress = 0.0f;
-    std::string generated_script_code = "";
     int custom_res_w = 1920;
     int custom_res_h = 1080;
     int active_res_w = 1920, active_res_h = 1080;
@@ -173,18 +169,7 @@ public:
     bool is_russian = true;
     double lifetime_seconds = 0.0;
     char hwid_str[64] = "UNKNOWN", cpu_str[128] = "CPU", gpu_str[128] = "GPU", os_str[64] = "Windows 10/11";
-    bool show_ai_chat = false;
     char chat_input[512] = "";
-    std::vector<ChatMessage> chat_history;
-    bool elite_tsp_enabled = false;
-    bool elite_ballistics_enabled = false;
-    float elite_bullet_speed = 800.0f;
-    float elite_bullet_drop = 9.8f;
-    bool elite_context_aware = false;
-    bool elite_smoke_vision = false;
-    bool elite_voice_ctrl = false;
-    bool elite_shadow_trainer = false;
-    char shadow_webhook[256] = "";
     float max_move_step = 50.0f;
     float lock_radius_base = 200.0f;
     float lock_radius_scale = 3.0f;
@@ -245,13 +230,9 @@ public:
     void RenderAimbotTab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
     void RenderVisualsTab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
     void RenderNeuralTab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
-    void RenderPwnzAITab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
     void RenderProfileTab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
     void RenderHardwareTab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
-    void RenderSecurityTab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
-    void RenderTelemetryTab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
     void RenderHWCheckTab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
-    void RenderXTierTab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
     void RenderMetricsTab(float content_w, float content_h, const ImVec4& acc_vec, ImU32 acc_u32, bool& cfg_changed);
 
     // ---- Íîâûå ìåòîäû äëÿ ðàçáèâêè Render ----

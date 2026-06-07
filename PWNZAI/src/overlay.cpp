@@ -338,15 +338,6 @@ void Overlay::LoadConfig(Aimbot* aim) {
     handlers["hum_overshoot_chance"] = [&](const std::string& v) { hum_overshoot_chance = safe_stof(v); };
     handlers["hum_randomize_bone"] = [&](const std::string& v) { hum_randomize_bone = std::stoi(v); };
     handlers["hum_tremor_scale"] = [&](const std::string& v) { hum_tremor_scale = safe_stof(v); };
-    handlers["elite_tsp_enabled"] = [&](const std::string& v) { elite_tsp_enabled = std::stoi(v); };
-    handlers["elite_ballistics_enabled"] = [&](const std::string& v) { elite_ballistics_enabled = std::stoi(v); };
-    handlers["elite_bullet_speed"] = [&](const std::string& v) { elite_bullet_speed = safe_stof(v); };
-    handlers["elite_bullet_drop"] = [&](const std::string& v) { elite_bullet_drop = safe_stof(v); };
-    handlers["elite_context_aware"] = [&](const std::string& v) { elite_context_aware = std::stoi(v); };
-    handlers["elite_smoke_vision"] = [&](const std::string& v) { elite_smoke_vision = std::stoi(v); };
-    handlers["elite_voice_ctrl"] = [&](const std::string& v) { elite_voice_ctrl = std::stoi(v); };
-    handlers["elite_shadow_trainer"] = [&](const std::string& v) { elite_shadow_trainer = std::stoi(v); };
-    handlers["shadow_webhook"] = [&](const std::string& v) { strncpy(shadow_webhook, v.c_str(), 255); };
     handlers["max_move_step"] = [&](const std::string& v) { max_move_step = safe_stof(v); };
     handlers["head_height_ratio"] = [&](const std::string& v) { head_height_ratio = safe_stof(v); };
     handlers["sticky_zone_factor"] = [&](const std::string& v) { sticky_zone_factor = safe_stof(v); };
@@ -502,15 +493,6 @@ void Overlay::SaveConfig(Aimbot* aim) {
     ss << "hum_overshoot_chance=" << hum_overshoot_chance << "\n";
     ss << "hum_randomize_bone=" << hum_randomize_bone << "\n";
     ss << "hum_tremor_scale=" << hum_tremor_scale << "\n";
-    ss << "elite_tsp_enabled=" << elite_tsp_enabled << "\n";
-    ss << "elite_ballistics_enabled=" << elite_ballistics_enabled << "\n";
-    ss << "elite_bullet_speed=" << elite_bullet_speed << "\n";
-    ss << "elite_bullet_drop=" << elite_bullet_drop << "\n";
-    ss << "elite_context_aware=" << elite_context_aware << "\n";
-    ss << "elite_smoke_vision=" << elite_smoke_vision << "\n";
-    ss << "elite_voice_ctrl=" << elite_voice_ctrl << "\n";
-    ss << "elite_shadow_trainer=" << elite_shadow_trainer << "\n";
-    ss << "shadow_webhook=" << shadow_webhook << "\n";
     ss << "max_move_step=" << max_move_step << "\n";
     ss << "head_height_ratio=" << head_height_ratio << "\n";
     ss << "sticky_zone_factor=" << sticky_zone_factor << "\n";
@@ -1081,21 +1063,16 @@ void Overlay::RenderNeuralTab(float content_w, float content_h, const ImVec4& ac
     case 0: RenderAimbotTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
     case 1: RenderVisualsTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
     case 2: RenderNeuralTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
-    case 3: RenderPwnzAITab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
-    case 4: RenderProfileTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
-    case 5: RenderHardwareTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
-    case 6: RenderSecurityTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
-    case 7: RenderTelemetryTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
-    case 8: RenderHWCheckTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
-    case 9: RenderXTierTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
-    case 10: RenderMetricsTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
+    case 3: RenderProfileTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
+    case 4: RenderHardwareTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
+    case 5: RenderHWCheckTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
+    case 6: RenderMetricsTab(content_w, content_h, acc_vec, acc_u32, cfg_changed); break;
     }
 
     ImGui::EndChild();
     ImGui::EndGroup();
     ImGui::End();
 
-    if (show_ai_chat) RenderChatWindow();
     RenderHWTutorial();
 }
 
@@ -1164,7 +1141,6 @@ void Overlay::Render(const std::vector<Detection>& detections, int screen_w, int
     static bool was_capturing = false;
     bool need_capture = false;
     if (is_drawing_zone) need_capture = true;
-    else if (show_menu || show_ai_chat || show_hw_tutorial) {
         if (ImGui::GetIO().WantCaptureMouse) need_capture = true;
         if (was_capturing && (GetAsyncKeyState(VK_LBUTTON) & 0x8000)) need_capture = true;
     }
