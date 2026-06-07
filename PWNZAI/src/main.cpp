@@ -95,25 +95,6 @@ struct SafeConfig {
     float aim_smoother;
     bool sticky_aim;
     float aim_deadzone;
-    bool aim_target_lock;
-    int aim_target_priority;
-    bool aim_dynamic_smooth;
-    int aim_switch_delay;
-    bool aim_lock_x, aim_lock_y;
-    int aim_curve_type;
-    bool kalman_enable;
-    float kalman_q, kalman_r;
-    bool oe_enable;
-    float oe_mincutoff, oe_beta;
-    bool aim_flicker;
-    float flick_speed;
-    int aim_flicker_key;
-    bool rcs_enable;
-    float rcs_pitch, rcs_yaw;
-    bool humanizer_enable;
-    float hum_reaction_delay, hum_overshoot_chance;
-    bool hum_randomize_bone;
-    float hum_tremor_scale;
     bool eco_mode;
     bool aim_enable;
     float byte_track_thresh;
@@ -139,17 +120,6 @@ struct SafeConfig {
     float mouse_pitch;
     float fovX;
     float fovY;
-    float min_speed_multiplier;
-    float max_speed_multiplier;
-    float snap_radius;
-    float near_radius;
-    float speed_curve_exponent;
-    float snap_boost_factor;
-    bool kalman_compensate_detection_delay;
-    float kalman_additional_prediction_ms;
-    float kalman_reset_timeout_sec;
-    float prediction_interval;
-    bool disable_headshot;
 };
 SafeConfig g_safe_cfg;
 std::mutex g_cfg_mutex;
@@ -691,46 +661,15 @@ void AimbotLoop(Aimbot* aim, Overlay* overlay) {
             auto now = std::chrono::steady_clock::now();
             long long current_time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
 
-            // ========== ПЕРЕДАЧА ПАРАМЕТРОВ В АИМБОТ (только существующие поля) ==========
+            // ========== ПЕРЕДАЧА ПАРАМЕТРОВ В АИМБОТ (заглушки) ==========
+            // Все параметры аимбота удалены, остались только базовые настройки hardware
             aim->aim_target = local_cfg.aim_target;
-            aim->target_offset_x = local_cfg.aim_offset_x;
-            aim->target_offset_y = local_cfg.aim_offset_y;
-            aim->fov = local_cfg.fov_aimbot;
-            aim->rcs_enable = local_cfg.rcs_enable;
-            aim->rcs_pitch = local_cfg.rcs_pitch;
-            aim->rcs_yaw = local_cfg.rcs_yaw;
-            aim->humanizer_enable = local_cfg.humanizer_enable;
-            aim->hum_reaction_delay = local_cfg.hum_reaction_delay;
-            aim->hum_tremor_scale = local_cfg.hum_tremor_scale;
-            aim->hum_micro_movements = local_cfg.hum_micro_movements;
-            aim->hum_micro_amplitude = local_cfg.hum_micro_amplitude;
-            aim->hum_reaction_jitter = local_cfg.hum_reaction_jitter;
-            aim->max_move_step = local_cfg.max_move_step;
-            aim->aim_target_lock = local_cfg.aim_target_lock;
-            aim->aim_lock_x = local_cfg.aim_lock_x;
-            aim->aim_lock_y = local_cfg.aim_lock_y;
-
-            // НОВЫЕ ПАРАМЕТРЫ (Sunone)
             aim->detection_resolution = local_cfg.detection_resolution;
             aim->mouse_sensitivity = local_cfg.mouse_sensitivity;
             aim->mouse_yaw = local_cfg.mouse_yaw;
             aim->mouse_pitch = local_cfg.mouse_pitch;
             aim->fovX = local_cfg.fovX;
             aim->fovY = local_cfg.fovY;
-            aim->min_speed_multiplier = local_cfg.min_speed_multiplier;
-            aim->max_speed_multiplier = local_cfg.max_speed_multiplier;
-            aim->snap_radius = local_cfg.snap_radius;
-            aim->near_radius = local_cfg.near_radius;
-            aim->speed_curve_exponent = local_cfg.speed_curve_exponent;
-            aim->snap_boost_factor = local_cfg.snap_boost_factor;
-            aim->kalman_enabled = local_cfg.kalman_enable;
-            aim->kalman_process_noise_position = local_cfg.kalman_q;
-            aim->kalman_measurement_noise = local_cfg.kalman_r;
-            aim->kalman_compensate_detection_delay = local_cfg.kalman_compensate_detection_delay;
-            aim->kalman_additional_prediction_ms = local_cfg.kalman_additional_prediction_ms;
-            aim->prediction_interval = local_cfg.prediction_interval;
-            aim->disable_headshot = local_cfg.disable_headshot;
-            aim->wind_mouse_enabled = false;  // пока отключено
 
             aim->Update(current_det, g_capture_w, g_capture_h, is_new_frame, current_time_ms, g_current_zoom.load());
             Sleep(1);
@@ -950,15 +889,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             g_safe_cfg.hum_tremor_scale = overlay.hum_tremor_scale;
             g_safe_cfg.eco_mode = overlay.eco_mode;
             g_safe_cfg.aim_enable = overlay.aim_enable;
-            g_safe_cfg.elite_tsp_enabled = overlay.elite_tsp_enabled;
-            g_safe_cfg.elite_ballistics_enabled = overlay.elite_ballistics_enabled;
-            g_safe_cfg.elite_bullet_speed = overlay.elite_bullet_speed;
-            g_safe_cfg.elite_bullet_drop = overlay.elite_bullet_drop;
-            g_safe_cfg.elite_context_aware = overlay.elite_context_aware;
-            g_safe_cfg.elite_smoke_vision = overlay.elite_smoke_vision;
-            g_safe_cfg.elite_voice_ctrl = overlay.elite_voice_ctrl;
-            g_safe_cfg.elite_shadow_trainer = overlay.elite_shadow_trainer;
-            strncpy(g_safe_cfg.shadow_webhook, overlay.shadow_webhook, 255);
             g_safe_cfg.byte_track_thresh = overlay.byte_track_thresh;
             g_safe_cfg.byte_track_buffer = overlay.byte_track_buffer;
             g_safe_cfg.byte_match_thresh = overlay.byte_match_thresh;

@@ -19,8 +19,7 @@ public:
     bool initialize(const std::string& model_path, int force_w = 0, int force_h = 0);
     std::vector<Detection> run_inference(const unsigned char* pixel_data, int w, int h,
         float body_conf_threshold, float head_conf_threshold,
-        float nms_threshold, int max_det,
-        bool elite_smoke_vision = false);
+        float nms_threshold, int max_det);
 
     int get_width() const { return model_width; }
     int get_height() const { return model_height; }

@@ -47,9 +47,7 @@
 #include "protect.h"
 #include "xorstr.hpp"
 #include "VMProtectSDK.h"
-#include "head_smoother.h"
 
-extern HeadSmoother g_head_smoother;
 #pragma comment(lib, "dwmapi.lib")
 #pragma comment(lib, "winmm.lib")
 
@@ -60,18 +58,9 @@ ID3D11RenderTargetView* g_mainRenderTargetView = nullptr;
 
 extern std::vector<Detection> g_shared_heads;
 extern std::mutex g_heads_mutex;
-extern std::atomic<int> g_byte_active_tracks;
-extern std::atomic<float> g_byte_avg_tracklet_len;
-extern std::atomic<float> g_byte_avg_speed;
-extern std::atomic<float> g_track_loss_rate;
-extern std::atomic<float> g_aim_overshoot_ratio;
-extern std::atomic<float> g_aim_motion_jerk;
 extern std::atomic<float> g_inference_jitter;
 extern std::atomic<float> g_last_inference_time;
 extern std::atomic<float> g_last_capture_time;
-extern std::atomic<float> g_locked_screen_x;
-extern std::atomic<float> g_locked_screen_y;
-extern std::atomic<bool> g_is_target_locked;
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 int Overlay::active_tab = 0;
@@ -1048,9 +1037,9 @@ void Overlay::RenderNeuralTab(float content_w, float content_h, const ImVec4& ac
 }
 
 // ============================================================
-    const char* tabs_en[] = { "Aimbot", "Visuals", "Neural", "PWNZ AI", "Profile", "Hardware\\2PC", "Security Guide", "Telemetry", "HW Check", "X-TIER", "Metrics" };
-    const char* tabs_ru[] = { u8"Аимбот", u8"Визуалы", u8"Нейросеть", u8"PWNZ AI", u8"Профиль", u8"Hardware\\2PC", u8"Безопасность", u8"Телеметрия", u8"Проверка HW", u8"X-TIER", u8"Метрики" };
-    for (int i = 0; i < 11; i++) {
+    const char* tabs_en[] = { "Aimbot", "Visuals", "Neural", "Profile", "Hardware\\2PC", "HW Check", "Metrics" };
+    const char* tabs_ru[] = { u8"Аимбот", u8"Визуалы", u8"Нейросеть", u8"Профиль", u8"Hardware\\2PC", u8"Проверка HW", u8"Метрики" };
+    for (int i = 0; i < 7; i++) {
         if (active_tab == i) { ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.12f, 0.10f, 0.18f, 1.0f)); ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f)); }
         else { ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f)); ImGui::PushStyleColor(ImGuiCol_Text, acc_vec); }
         ImVec2 p_min = ImGui::GetCursorScreenPos();
@@ -1102,10 +1091,10 @@ void Overlay::Render(const std::vector<Detection>& detections, int screen_w, int
     }
 
     ImGui::GetIO().FontGlobalScale = menu_scale / 100.0f;
-    static bool last_obs = !obs_bypass;
-    if (obs_bypass != last_obs) {
-        SetWindowDisplayAffinity(hwnd, obs_bypass ? WDA_EXCLUDEFROMCAPTURE : WDA_NONE);
-        last_obs = obs_bypass;
+    if (obs_bypass) {
+        SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE);
+    } else {
+        SetWindowDisplayAffinity(hwnd, WDA_NONE);
     }
     ImGui_ImplDX11_NewFrame(); ImGui_ImplWin32_NewFrame();
     POINT m_pt;
@@ -1141,9 +1130,8 @@ void Overlay::Render(const std::vector<Detection>& detections, int screen_w, int
     static bool was_capturing = false;
     bool need_capture = false;
     if (is_drawing_zone) need_capture = true;
-        if (ImGui::GetIO().WantCaptureMouse) need_capture = true;
-        if (was_capturing && (GetAsyncKeyState(VK_LBUTTON) & 0x8000)) need_capture = true;
-    }
+    if (ImGui::GetIO().WantCaptureMouse) need_capture = true;
+    if (was_capturing && (GetAsyncKeyState(VK_LBUTTON) & 0x8000)) need_capture = true;
     was_capturing = need_capture;
     ToggleClickability(need_capture);
     if (cfg_changed) SaveConfig(aim);
