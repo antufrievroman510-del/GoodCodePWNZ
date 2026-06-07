@@ -34,7 +34,6 @@
 #include "protect.h"
 #include "xorstr.hpp"
 #include "VMProtectSDK.h"
-#include "head_smoother.h"
 
 #define BUILDING_BYTE_TRACK_EIGEN
 #include "BYTETracker.h"
@@ -79,8 +78,6 @@ std::atomic<float> g_inference_jitter(0.0f);
 std::deque<float> g_inference_history;
 std::mutex g_metrics_mutex;
 
-HeadSmoother g_head_smoother;
-
 struct SafeConfig {
     float ai_confidence_body, ai_confidence_head;
     float min_box_area_body, min_box_area_head;
@@ -119,10 +116,6 @@ struct SafeConfig {
     float hum_tremor_scale;
     bool eco_mode;
     bool aim_enable;
-    bool elite_tsp_enabled, elite_ballistics_enabled;
-    float elite_bullet_speed, elite_bullet_drop;
-    bool elite_context_aware, elite_smoke_vision, elite_voice_ctrl, elite_shadow_trainer;
-    char shadow_webhook[256];
     float byte_track_thresh;
     int byte_track_buffer;
     float byte_match_thresh;
@@ -375,7 +368,7 @@ void InferenceThread(DXGICapture* cap, Detector* det, Overlay* overlay) {
                 }
                 current_frame_raw = det->run_inference(capture_buffers[current_write], current_yolo_w, current_yolo_h,
                     body_conf, head_conf, local_cfg.neural_nms, local_cfg.neural_max_det,
-                    local_cfg.elite_smoke_vision);
+                    false);
             }
             auto infer_end = std::chrono::high_resolution_clock::now();
             float infer_ms = std::chrono::duration<float, std::milli>(infer_end - infer_start).count();
@@ -712,15 +705,6 @@ void AimbotLoop(Aimbot* aim, Overlay* overlay) {
             aim->hum_micro_movements = local_cfg.hum_micro_movements;
             aim->hum_micro_amplitude = local_cfg.hum_micro_amplitude;
             aim->hum_reaction_jitter = local_cfg.hum_reaction_jitter;
-            aim->elite_tsp_enabled = local_cfg.elite_tsp_enabled;
-            aim->elite_ballistics_enabled = local_cfg.elite_ballistics_enabled;
-            aim->elite_bullet_speed = local_cfg.elite_bullet_speed;
-            aim->elite_bullet_drop = local_cfg.elite_bullet_drop;
-            aim->elite_context_aware = local_cfg.elite_context_aware;
-            aim->elite_smoke_vision = local_cfg.elite_smoke_vision;
-            aim->elite_voice_ctrl = local_cfg.elite_voice_ctrl;
-            aim->elite_shadow_trainer = local_cfg.elite_shadow_trainer;
-            strncpy(aim->shadow_webhook, local_cfg.shadow_webhook, 255);
             aim->max_move_step = local_cfg.max_move_step;
             aim->aim_target_lock = local_cfg.aim_target_lock;
             aim->aim_lock_x = local_cfg.aim_lock_x;
