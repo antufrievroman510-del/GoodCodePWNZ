@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #define NOMINMAX
 #ifndef WIN32_LEAN_AND_MEAN
