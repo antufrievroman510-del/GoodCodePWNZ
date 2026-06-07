@@ -9,7 +9,6 @@
 #include "auth.h"
 #include "aimbot.h"
 #include "detector.h"
-#include "AimbotTarget.h"
 #include "network_2pc.h"
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -47,9 +46,7 @@
 #include "protect.h"
 #include "xorstr.hpp"
 #include "VMProtectSDK.h"
-#include "head_smoother.h"
 
-extern HeadSmoother g_head_smoother;
 #pragma comment(lib, "dwmapi.lib")
 #pragma comment(lib, "winmm.lib")
 
