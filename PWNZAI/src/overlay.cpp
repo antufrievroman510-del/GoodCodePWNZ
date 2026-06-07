@@ -1,4 +1,4 @@
-﻿#pragma execution_character_set("utf-8")
+#pragma execution_character_set("utf-8")
 #pragma warning(disable: 4068)
 #pragma push_macro("max")
 #pragma push_macro("min")
