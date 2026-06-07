@@ -52,43 +52,17 @@ public:
     float last_auth_check_time = 0.0f;
     std::string user_expiry_date = "1970-01-01 00:00:00";
 
-    bool draw_esp = true;
-    bool draw_fov = true;
-    bool draw_fov_neural = true;
-    bool draw_watermark = true;
-    bool draw_crosshair = false;
-    bool disable_all_visuals_when_hidden = true;
-    float esp_thickness = 1.5f;
-    int esp_style = 0;
-    float color_esp_visible[3] = { 1,0.2f,0.2f };
-    float color_esp_hidden[3] = { 0.7f,0.2f,1 };
-    bool esp_oe_enable = true;
-    float esp_oe_mincutoff = 0.5f;
-    float esp_oe_beta = 0.01f;
-    OneEuroFilter espFilterX, espFilterY, espFilterW, espFilterH;
-    bool was_empty_last_frame = true;
-
+    // Aimbot basic settings
     bool aim_enable = true;
     int aim_target = 0;
     int aim_key_main = VK_RBUTTON;
+    int aim_key_sub = 0;
     int aim_toggle_key = 0;
 
-    // Hardware settings (needed for hardware tab)
+    // Hardware settings
     int hardware_type = 0;
     int com_port = 2;
     bool apply_hw_flag = false;
-
-    // Visuals settings
-    bool draw_esp = true;
-    bool draw_fov = true;
-    bool draw_fov_neural = true;
-    bool draw_watermark = true;
-    bool draw_crosshair = false;
-    bool disable_all_visuals_when_hidden = true;
-    float esp_thickness = 1.5f;
-    int esp_style = 0;
-    float color_esp_visible[3] = { 1,0.2f,0.2f };
-    float color_esp_hidden[3] = { 0.7f,0.2f,1 };
 
     // Neural settings
     int ai_model = 0;
@@ -108,30 +82,6 @@ public:
     bool is_russian = true;
     bool obs_bypass = true;
     bool eco_mode = true;
-
-    // Auth/profile
-    bool is_loading = true;
-    float load_progress = 0.0f;
-    int current_tip_idx = 0;
-    bool is_auto_logging_in = false;
-    float auto_login_anim_time = 0.0f;
-    bool is_authenticated = false;
-    bool is_register_mode = false;
-    char auth_username[64] = "";
-    char auth_password[64] = "";
-    std::string auth_status_msg = "";
-    float auth_status_col[3] = { 1,1,1 };
-    float last_auth_check_time = 0.0f;
-    std::string user_expiry_date = "1970-01-01 00:00:00";
-    double lifetime_seconds = 0.0;
-    char hwid_str[64] = "UNKNOWN", cpu_str[128] = "CPU", gpu_str[128] = "GPU", os_str[64] = "Windows 10/11";
-
-    // ESP filter
-    bool esp_oe_enable = true;
-    float esp_oe_mincutoff = 0.5f;
-    float esp_oe_beta = 0.01f;
-    OneEuroFilter espFilterX, espFilterY, espFilterW, espFilterH;
-    bool was_empty_last_frame = true;
 
     // ---- Îñíîâíûå ìåòîäû ----
     bool Initialize();
