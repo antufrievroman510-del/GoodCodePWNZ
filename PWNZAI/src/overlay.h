@@ -82,6 +82,7 @@ public:
     bool is_drawing_zone = false;
     float excl_x1 = 0, excl_y1 = 0, excl_x2 = 0, excl_y2 = 0;
     float fov_aimbot = 190.0f, fov_scan = 192.0f;
+    bool enable_dynamic_fov = false;
     float aim_offset_x = 0, aim_offset_y = 0;
     int ai_model = 0;
     float ai_confidence_body = 48.0f;
