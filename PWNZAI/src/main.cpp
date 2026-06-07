@@ -1,4 +1,4 @@
-﻿#define WINVER 0x0601
+#define WINVER 0x0601
 #define _WIN32_WINNT 0x0601
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
@@ -89,12 +89,10 @@ struct SafeConfig {
     int memory_enemy_frames;
     int aim_target;
     float aim_offset_x, aim_offset_y;
-    bool enable_pose_adaptive;
     float fov_aimbot;
     float aim_min_sens, aim_max_sens;
     float aim_smoother;
     bool sticky_aim;
-    float aim_deadzone;
     bool eco_mode;
     bool aim_enable;
     float byte_track_thresh;
@@ -638,26 +636,6 @@ void AimbotLoop(Aimbot* aim, Overlay* overlay) {
             }
             if (!is_new_frame) { Sleep(1); continue; }
 
-            if (local_cfg.aim_target_lock && current_det.size() > 1) {
-                float center_x = g_capture_w / 2.0f;
-                float center_y = g_capture_h / 2.0f;
-                int best_idx = 0;
-                float best_dist_sq = (current_det[0].box.x + current_det[0].box.w / 2 - center_x) * (current_det[0].box.x + current_det[0].box.w / 2 - center_x) +
-                    (current_det[0].box.y + current_det[0].box.h / 2 - center_y) * (current_det[0].box.y + current_det[0].box.h / 2 - center_y);
-                for (size_t i = 1; i < current_det.size(); ++i) {
-                    float dx = current_det[i].box.x + current_det[i].box.w / 2 - center_x;
-                    float dy = current_det[i].box.y + current_det[i].box.h / 2 - center_y;
-                    float dist_sq = dx * dx + dy * dy;
-                    if (dist_sq < best_dist_sq) {
-                        best_dist_sq = dist_sq;
-                        best_idx = (int)i;
-                    }
-                }
-                std::vector<Detection> single_det;
-                single_det.push_back(current_det[best_idx]);
-                current_det = single_det;
-            }
-
             auto now = std::chrono::steady_clock::now();
             long long current_time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
 
@@ -820,7 +798,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (logfile.is_open()) { logfile << "Step 9: entering main loop" << std::endl; logfile.flush(); }
 
     // Инициализация g_safe_cfg значениями по умолчанию
-    g_safe_cfg.aim_curve_type = 3;
     g_safe_cfg.max_move_step = 50.0f;
     g_safe_cfg.sticky_zone_factor = 0.5f;
     g_safe_cfg.head_height_ratio = 0.1f;
@@ -835,16 +812,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     g_safe_cfg.mouse_pitch = 0.022f;
     g_safe_cfg.fovX = 106.0f;
     g_safe_cfg.fovY = 74.0f;
-    g_safe_cfg.min_speed_multiplier = 0.1f;
-    g_safe_cfg.max_speed_multiplier = 0.1f;
-    g_safe_cfg.snap_radius = 1.5f;
-    g_safe_cfg.near_radius = 25.0f;
-    g_safe_cfg.speed_curve_exponent = 3.0f;
-    g_safe_cfg.snap_boost_factor = 1.15f;
-    g_safe_cfg.kalman_compensate_detection_delay = true;
-    g_safe_cfg.kalman_additional_prediction_ms = 0.0f;
-    g_safe_cfg.prediction_interval = 0.01f;
-    g_safe_cfg.disable_headshot = false;
 
     bool was_menu_open = true; auto auth_check_timer = std::chrono::steady_clock::now(); bool screen_cleared_for_stealth = false;
     int render_yolo_w = 960, render_yolo_h = 544;
@@ -865,28 +832,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             g_safe_cfg.memory_enemy_frames = overlay.memory_enemy_frames;
             g_safe_cfg.aim_target = overlay.aim_target;
             g_safe_cfg.aim_offset_x = overlay.aim_offset_x; g_safe_cfg.aim_offset_y = overlay.aim_offset_y;
-            g_safe_cfg.enable_pose_adaptive = overlay.enable_pose_adaptive;
             g_safe_cfg.fov_aimbot = overlay.fov_aimbot;
             g_safe_cfg.aim_min_sens = overlay.aim_min_sens; g_safe_cfg.aim_max_sens = overlay.aim_max_sens;
             g_safe_cfg.aim_smoother = overlay.aim_smoother;
             g_safe_cfg.sticky_aim = overlay.sticky_aim;
-            g_safe_cfg.aim_deadzone = overlay.aim_deadzone;
-            g_safe_cfg.aim_target_lock = overlay.aim_target_lock;
-            g_safe_cfg.aim_target_priority = overlay.aim_target_priority;
-            g_safe_cfg.aim_dynamic_smooth = overlay.aim_dynamic_smooth;
-            g_safe_cfg.aim_switch_delay = overlay.aim_switch_delay;
-            g_safe_cfg.aim_lock_x = overlay.aim_lock_x; g_safe_cfg.aim_lock_y = overlay.aim_lock_y;
-            g_safe_cfg.aim_curve_type = overlay.aim_curve_type;
-            g_safe_cfg.aim_flicker = overlay.aim_flicker;
-            g_safe_cfg.flick_speed = overlay.flick_speed;
-            g_safe_cfg.aim_flicker_key = overlay.aim_flicker_key;
-            g_safe_cfg.rcs_enable = overlay.rcs_enable;
-            g_safe_cfg.rcs_pitch = overlay.rcs_pitch; g_safe_cfg.rcs_yaw = overlay.rcs_yaw;
-            g_safe_cfg.humanizer_enable = overlay.humanizer_enable;
-            g_safe_cfg.hum_reaction_delay = overlay.hum_reaction_delay;
-            g_safe_cfg.hum_overshoot_chance = overlay.hum_overshoot_chance;
-            g_safe_cfg.hum_randomize_bone = overlay.hum_randomize_bone;
-            g_safe_cfg.hum_tremor_scale = overlay.hum_tremor_scale;
             g_safe_cfg.eco_mode = overlay.eco_mode;
             g_safe_cfg.aim_enable = overlay.aim_enable;
             g_safe_cfg.byte_track_thresh = overlay.byte_track_thresh;

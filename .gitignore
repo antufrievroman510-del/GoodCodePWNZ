@@ -20,7 +20,6 @@ node_modules/
 build/
 dist/
 target/
-.gradle/
 
 # Editors
 .vscode/
@@ -35,12 +34,9 @@ target/
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment
 .env
 .env.local
 *.env.*
-
-# Coverage
-coverage/
-htmlcov/
-.coverage
 ```
