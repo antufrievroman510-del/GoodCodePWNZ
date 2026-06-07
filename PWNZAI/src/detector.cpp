@@ -121,13 +121,13 @@ bool Detector::initialize(const std::string& model_path, int force_w, int force_
 
 std::vector<Detection> Detector::run_inference(const unsigned char* pixel_data, int w, int h,
     float body_conf_threshold, float head_conf_threshold,
-    float /*nms_threshold*/, int max_det, bool elite_smoke_vision) {
+    float /*nms_threshold*/, int max_det) {
 
     std::vector<Detection> final_results;
     if (!session || w != model_width || h != model_height) return final_results;
 
-    float actual_body_thr = elite_smoke_vision ? (body_conf_threshold * 0.75f) : body_conf_threshold;
-    float actual_head_thr = elite_smoke_vision ? (head_conf_threshold * 0.75f) : head_conf_threshold;
+    float actual_body_thr = body_conf_threshold;
+    float actual_head_thr = head_conf_threshold;
     if (actual_body_thr < 0.1f) actual_body_thr = 0.1f;
     if (actual_head_thr < 0.1f) actual_head_thr = 0.1f;
 
