@@ -120,15 +120,6 @@ public:
     bool is_russian = true;
     double lifetime_seconds = 0.0;
     char hwid_str[64] = "UNKNOWN", cpu_str[128] = "CPU", gpu_str[128] = "GPU", os_str[64] = "Windows 10/11";
-    float max_move_step = 50.0f;
-    float lock_radius_base = 200.0f;
-    float lock_radius_scale = 3.0f;
-    float head_height_ratio = 0.1f;
-    float sticky_zone_factor = 0.5f;
-    float sticky_damping = 0.3f;
-    bool hum_micro_movements = true;
-    float hum_micro_amplitude = 0.8f;
-    float hum_reaction_jitter = 2.0f;
     float byte_track_thresh = 0.5f;
     int byte_track_buffer = 30;
     float byte_match_thresh = 0.8f;

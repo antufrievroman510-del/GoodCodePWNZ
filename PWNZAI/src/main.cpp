@@ -104,12 +104,6 @@ struct SafeConfig {
     float sticky_threshold;
     int sticky_frames_keep;
     int prediction_method;
-    float max_move_step;
-    float sticky_zone_factor;
-    float head_height_ratio;
-    bool hum_micro_movements;
-    float hum_micro_amplitude;
-    float hum_reaction_jitter;
 
     // НОВЫЕ ПОЛЯ ДЛЯ АИМБОТА (Sunone)
     int detection_resolution;
@@ -798,13 +792,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (logfile.is_open()) { logfile << "Step 9: entering main loop" << std::endl; logfile.flush(); }
 
     // Инициализация g_safe_cfg значениями по умолчанию
-    g_safe_cfg.max_move_step = 50.0f;
-    g_safe_cfg.sticky_zone_factor = 0.5f;
-    g_safe_cfg.head_height_ratio = 0.1f;
-    g_safe_cfg.hum_micro_movements = true;
-    g_safe_cfg.hum_micro_amplitude = 0.8f;
-    g_safe_cfg.hum_reaction_jitter = 2.0f;
-
     // Инициализация новых полей
     g_safe_cfg.detection_resolution = 960;
     g_safe_cfg.mouse_sensitivity = 1.0f;
@@ -847,12 +834,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             g_safe_cfg.sticky_threshold = overlay.sticky_threshold;
             g_safe_cfg.sticky_frames_keep = overlay.sticky_frames_keep;
             g_safe_cfg.prediction_method = overlay.prediction_method;
-            g_safe_cfg.max_move_step = overlay.max_move_step;
-            g_safe_cfg.sticky_zone_factor = overlay.sticky_zone_factor;
-            g_safe_cfg.head_height_ratio = overlay.head_height_ratio;
-            g_safe_cfg.hum_micro_movements = overlay.hum_micro_movements;
-            g_safe_cfg.hum_micro_amplitude = overlay.hum_micro_amplitude;
-            g_safe_cfg.hum_reaction_jitter = overlay.hum_reaction_jitter;
         }
         if (overlay.is_authenticated) {
             auto now_time = std::chrono::steady_clock::now();
