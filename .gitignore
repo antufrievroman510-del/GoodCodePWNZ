@@ -1,1 +1,40 @@
-Nothing should be ignored based on the provided file changes. The modification of 'PWNZAI/src/overlay.h' is a source code file and does not require any new ignore rules. The current .gitignore content is empty, so no additional rules are needed.
+```
+# Compiled and build artifacts
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
+build/
+dist/
+
+# Dependencies
+venv/
+.venv/
+node_modules/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+target/
+.gradle/
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+```
